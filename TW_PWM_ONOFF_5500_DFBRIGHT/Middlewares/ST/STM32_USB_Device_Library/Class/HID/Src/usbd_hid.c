@@ -711,7 +711,7 @@ static uint8_t  USBD_HID_StartOfFrame (USBD_HandleTypeDef *pdev )
             isFirstReadFromHost = false;
             CLIENT_GetStatusReport( responsePacket );
         }
-        if (shouldAllowReportingFromClient) {
+        if (shouldAllowReportingFromDevice) {
           CLIENT_GetStatusReport( responsePacket );
         }
         USBD_HID_SendReport ( pdev, hhid->outgoingStatusBufferToHost, hhid->outgoingStatusBufferToHostSendSize );

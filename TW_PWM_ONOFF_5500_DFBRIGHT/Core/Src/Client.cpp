@@ -176,6 +176,8 @@ void CLIENT_ProcessCommand(uint32_t commandOpcode, const uint8_t *commandParamet
         {
             if(!shouldAllowReportingFromDevice) {
             	shouldAllowReportingFromDevice = true;
+            } else {
+            	shouldAllowReportingFromDevice = false;
             }
             PACKET_GPIO *packet = (PACKET_GPIO *)commandParameters;
             setGPIOState(packet->gpioMask);
