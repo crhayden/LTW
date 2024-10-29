@@ -28,6 +28,8 @@
 // variables
 uint16_t brightness_LD1 = 5500;//default variable for duty% setting, LD1
 uint16_t brightness_LD2 = 5500;//default variable for duty% setting, LD2
+bool shouldAllowReportingFromDevice = false;
+bool isFirstReadFromHost = true;
 
 /**
  * @brief Return a bitmap of merged status flags
@@ -172,6 +174,9 @@ void CLIENT_ProcessCommand(uint32_t commandOpcode, const uint8_t *commandParamet
 
         case RUN_GPIO:
         {
+            if(!shouldAllowReportingFromDevice) {
+            	shouldAllowReportingFromDevice = true;
+            }
             PACKET_GPIO *packet = (PACKET_GPIO *)commandParameters;
             setGPIOState(packet->gpioMask);
         }

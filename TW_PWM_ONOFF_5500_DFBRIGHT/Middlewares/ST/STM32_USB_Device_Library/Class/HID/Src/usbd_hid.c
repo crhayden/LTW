@@ -331,55 +331,55 @@ __ALIGN_BEGIN static uint8_t USBD_HID_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_
 
 __ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE]  __ALIGN_END =
 {
- HID_UsagePageVendor(0x0),		// vendor defined
-	HID_Usage(0x01),
+ HID_UsagePageVendor(0x0),    // vendor defined
+  HID_Usage(0x01),
   HID_Collection(HID_Application),
     HID_LogicalMin(0x00),
     HID_LogicalMaxS(0xff),
     HID_ReportSize(8),
 
- 	// input report 1 - 62 bytes of data + report ID (has to be less than 64 total bytes)
-	HID_ReportID(HID_REPORT_ID_STATUS),
+  // input report 1 - 62 bytes of data + report ID (has to be less than 64 total bytes)
+  HID_ReportID(HID_REPORT_ID_STATUS),
     HID_ReportCount(HID_REPORT_LENGTH_STATUS),
     HID_Usage(0x01),
     HID_Input(HID_Data | HID_Variable | HID_Absolute),
     HID_Usage(0x01),
     HID_Output(HID_Data | HID_Variable | HID_Absolute),
 
- 	// input and output report 1 - Single Data byte containing command
-	HID_ReportID(HID_REPORT_ID_NO_DATA),
+  // input and output report 1 - Single Data byte containing command
+  HID_ReportID(HID_REPORT_ID_NO_DATA),
     HID_ReportCount(HID_REPORT_LENGTH_NO_DATA + USB_HID_HEADER_SIZE - 1),
     HID_Usage(0x01),
     HID_Input(HID_Data | HID_Variable | HID_Absolute),
     HID_Usage(0x01),
     HID_Output(HID_Data | HID_Variable | HID_Absolute),
 
- 	// input and output report 2 - One byte containing command and up to 8 data bytes
-	HID_ReportID(HID_REPORT_ID_SHORT),
+  // input and output report 2 - One byte containing command and up to 8 data bytes
+  HID_ReportID(HID_REPORT_ID_SHORT),
     HID_ReportCountS(HID_REPORT_LENGTH_SHORT + USB_HID_HEADER_SIZE - 1),
     HID_Usage(0x01),
     HID_Input(HID_Data | HID_Variable | HID_Absolute),
     HID_Usage(0x01),
     HID_Output(HID_Data | HID_Variable | HID_Absolute),
 
- 	// input and output report 3 - One byte containing command and up to 32 data bytes
-	HID_ReportID(HID_REPORT_ID_MEDIUM),
+  // input and output report 3 - One byte containing command and up to 32 data bytes
+  HID_ReportID(HID_REPORT_ID_MEDIUM),
     HID_ReportCount(HID_REPORT_LENGTH_MEDIUM + USB_HID_HEADER_SIZE - 1),
     HID_Usage(0x01),
     HID_Input(HID_Data | HID_Variable | HID_Absolute),
     HID_Usage(0x01),
     HID_Output(HID_Data | HID_Variable | HID_Absolute),
 
- 	// input and output report 4 - One byte containing command and up to 63 data bytes
-	HID_ReportID(HID_REPORT_ID_LONG),
+  // input and output report 4 - One byte containing command and up to 63 data bytes
+  HID_ReportID(HID_REPORT_ID_LONG),
     HID_ReportCountS(HID_REPORT_LENGTH_LONG + USB_HID_HEADER_SIZE - 1),
     HID_Usage(0x01),
     HID_Input(HID_Data | HID_Variable | HID_Absolute),
     HID_Usage(0x01),
     HID_Output(HID_Data | HID_Variable | HID_Absolute),
 
- 	// input and output report 5 - packet same size as sector - 4096 bytes
-	HID_ReportID(HID_REPORT_ID_SECTOR),
+  // input and output report 5 - packet same size as sector - 4096 bytes
+  HID_ReportID(HID_REPORT_ID_SECTOR),
     HID_ReportCountS(HID_REPORT_LENGTH_SECTOR + USB_HID_HEADER_SIZE - 1),
     HID_Usage(0x01),
     HID_Input(HID_Data | HID_Variable | HID_Absolute),
@@ -527,7 +527,7 @@ static uint8_t  USBD_HID_Setup (USBD_HandleTypeDef *pdev,
       else
       {
         USBD_CtlError (pdev, req);
-			  ret = USBD_FAIL;
+        ret = USBD_FAIL;
       }
       break;
 
@@ -560,7 +560,7 @@ static uint8_t  USBD_HID_Setup (USBD_HandleTypeDef *pdev,
       else
       {
         USBD_CtlError (pdev, req);
-			  ret = USBD_FAIL;
+        ret = USBD_FAIL;
       }
       break;
 
@@ -572,7 +572,7 @@ static uint8_t  USBD_HID_Setup (USBD_HandleTypeDef *pdev,
       else
       {
         USBD_CtlError (pdev, req);
-			  ret = USBD_FAIL;
+        ret = USBD_FAIL;
       }
       break;
 
@@ -693,27 +693,33 @@ static uint8_t  *USBD_HID_GetOtherSpeedCfgDesc (uint16_t *length)
   */
 static uint8_t  USBD_HID_StartOfFrame (USBD_HandleTypeDef *pdev )
 {
-	USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
+  USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
 
-	if (pdev->dev_state == USBD_STATE_CONFIGURED ) {
-		if (  hhid->state == HID_IDLE ) {
-			if ( hhid->reportState == HID_REPORT_READY ) {
+  if (pdev->dev_state == USBD_STATE_CONFIGURED ) {
+    if (  hhid->state == HID_IDLE ) {
+      if ( hhid->reportState == HID_REPORT_READY ) {
 
-				hhid->reportState = HID_REPORT_TRANSMITTING;
-				USBD_HID_SendReport ( pdev, hhid->outgoingReportBufferToHost, hhid->outgoingReportBufferToHostSendSize );
+        hhid->reportState = HID_REPORT_TRANSMITTING;
+        USBD_HID_SendReport ( pdev, hhid->outgoingReportBufferToHost, hhid->outgoingReportBufferToHostSendSize );
 
-			} else if ( hhid->reportState == HID_REPORT_IDLE ){
+      } else if ( hhid->reportState == HID_REPORT_IDLE ){
 
-				uint8_t *responsePacket = hhid->outgoingStatusBufferToHost;
+        uint8_t *responsePacket = hhid->outgoingStatusBufferToHost;
 
-				// fill in the data
-				CLIENT_GetStatusReport( responsePacket );
+        // fill in the data
+        if (isFirstReadFromHost) {
+            isFirstReadFromHost = false;
+            CLIENT_GetStatusReport( responsePacket );
+        }
+        if (shouldAllowReportingFromClient) {
+          CLIENT_GetStatusReport( responsePacket );
+        }
+        USBD_HID_SendReport ( pdev, hhid->outgoingStatusBufferToHost, hhid->outgoingStatusBufferToHostSendSize );
 
-				USBD_HID_SendReport ( pdev, hhid->outgoingStatusBufferToHost, hhid->outgoingStatusBufferToHostSendSize );
-			}
-		}
-	}
-	return USBD_OK;
+      }
+    }
+  }
+  return USBD_OK;
 }
 /**
   * @brief  USBD_HID_DataIn
@@ -728,26 +734,26 @@ static uint8_t  USBD_HID_DataIn (USBD_HandleTypeDef *pdev,
 
   /* Ensure that the FIFO is empty before a new transfer, this condition could
   be caused by  a new transfer before the end of the previous transfer */
-	USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
-	switch ( hhid->reportState ) {
-	case HID_REPORT_IDLE:
-		break;
-	case HID_REPORT_INCOMING:
-		break;
-	case HID_REPORT_READY:
-		break;
-	case HID_REPORT_TRANSMITTING:
-		hhid->reportState = HID_REPORT_IDLE;
-		break;
-	default:
-		break;
-	}
+  USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
+  switch ( hhid->reportState ) {
+  case HID_REPORT_IDLE:
+    break;
+  case HID_REPORT_INCOMING:
+    break;
+  case HID_REPORT_READY:
+    break;
+  case HID_REPORT_TRANSMITTING:
+    hhid->reportState = HID_REPORT_IDLE;
+    break;
+  default:
+    break;
+  }
 
-	if ( hhid->state == HID_BUSY ) {
-		hhid->state = HID_IDLE;
-	}
+  if ( hhid->state == HID_BUSY ) {
+    hhid->state = HID_IDLE;
+  }
 
-	return USBD_OK;
+  return USBD_OK;
 }
 
 /**
@@ -789,19 +795,19 @@ uint8_t USBD_HID_EP0_TxSent(USBD_HandleTypeDef *pdev)
   */
 uint8_t USBD_HID_EP0_RxReady(USBD_HandleTypeDef *pdev)
 {
-	USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
+  USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
 
-	if ( hhid->reportState != HID_REPORT_INCOMING )
-	{
-		return USBD_OK;
-	}
+  if ( hhid->reportState != HID_REPORT_INCOMING )
+  {
+    return USBD_OK;
+  }
 
-	PACKET_HEADER * hidReceiveHeader = (PACKET_HEADER*)hhid->incomingReportBufferFromHost;
+  PACKET_HEADER * hidReceiveHeader = (PACKET_HEADER*)hhid->incomingReportBufferFromHost;
 
-	uint32_t hostCommand = hidReceiveHeader->message;
-	uint8_t *commandPacket = hhid->incomingReportBufferFromHost + sizeof(PACKET_HEADER);
-	CLIENT_ProcessCommand(hostCommand, commandPacket);
-	hhid->reportState = HID_REPORT_IDLE;
+  uint32_t hostCommand = hidReceiveHeader->message;
+  uint8_t *commandPacket = hhid->incomingReportBufferFromHost + sizeof(PACKET_HEADER);
+  CLIENT_ProcessCommand(hostCommand, commandPacket);
+  hhid->reportState = HID_REPORT_IDLE;
 
   return USBD_OK;
 }

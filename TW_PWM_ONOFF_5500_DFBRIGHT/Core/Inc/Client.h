@@ -21,6 +21,8 @@ extern "C"
 
 extern void CLIENT_GetStatusReport( uint8_t *responsePacket );
 extern void CLIENT_ProcessCommand( uint32_t hostCommand, const uint8_t *commandPacket);
+extern bool shouldAllowReportingFromDevice;
+extern bool isFirstReadFromHost;
 
 #ifdef __cplusplus
 }
