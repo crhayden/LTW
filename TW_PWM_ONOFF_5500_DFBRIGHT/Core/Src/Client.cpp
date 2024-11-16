@@ -28,8 +28,7 @@
 // variables
 uint16_t brightness_LD1 = 5500;//default variable for duty% setting, LD1
 uint16_t brightness_LD2 = 5500;//default variable for duty% setting, LD2
-bool shouldAllowReportingFromDevice = false;
-bool isFirstReadFromHost = true;
+bool 	shouldSuspendResumeUSBData = false;//default state to suspend USB responses from controller
 
 /**
  * @brief Return a bitmap of merged status flags
@@ -174,11 +173,6 @@ void CLIENT_ProcessCommand(uint32_t commandOpcode, const uint8_t *commandParamet
 
         case RUN_GPIO:
         {
-            if(!shouldAllowReportingFromDevice) {
-            	shouldAllowReportingFromDevice = true;
-            } else {
-            	shouldAllowReportingFromDevice = false;
-            }
             PACKET_GPIO *packet = (PACKET_GPIO *)commandParameters;
             setGPIOState(packet->gpioMask);
         }
@@ -216,7 +210,11 @@ void CLIENT_ProcessCommand(uint32_t commandOpcode, const uint8_t *commandParamet
 				__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,brightness_LD2);
 				HAL_Delay(10);
 				break;
+			case SUSPEND_RESUME_USB_DATA:
+				shouldSuspendResumeUSBData == false ? shouldSuspendResumeUSBData = true: shouldSuspendResumeUSBData = false;
 
+                //assertBootloaderJump();
+                break;
             default:
                 break;
             }

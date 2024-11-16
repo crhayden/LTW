@@ -87,6 +87,7 @@ enum CMD {
 	RESET_MODEM = 13,
 	DUTY_LD1 = 14,
 	DUTY_LD2 = 15,
+	SUSPEND_RESUME_USB_DATA = 16,
 };
 
 // Header packet attached to every message

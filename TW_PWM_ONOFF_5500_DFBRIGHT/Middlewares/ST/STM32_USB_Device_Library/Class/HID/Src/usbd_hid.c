@@ -707,7 +707,7 @@ static uint8_t  USBD_HID_StartOfFrame (USBD_HandleTypeDef *pdev )
         uint8_t *responsePacket = hhid->outgoingStatusBufferToHost;
 
         // fill in the data
-        if (shouldAllowReportingFromDevice) {
+        if (shouldSuspendResumeUSBData) {
           CLIENT_GetStatusReport( responsePacket );
           USBD_HID_SendReport ( pdev, hhid->outgoingStatusBufferToHost, hhid->outgoingStatusBufferToHostSendSize );
         }
